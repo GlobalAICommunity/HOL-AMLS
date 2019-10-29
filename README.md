@@ -10,17 +10,16 @@
 ### 1.1 - Create the Azure Notebook Environment
 * Goto: [notebooks.azure.com](https://notebooks.azure.com/)
 * Login with your Microsoft Passport.
-* Click on 'MY PROJECTS'
+* Click on 'My Projects' in the top menu
 * Click on 'New Project'
 * Give the project a name and a project ID and make the project private. *Make it private just to be sure you don't put any secrets online*
 
-### 1.1 - Create the Jupytor Notebook
-* Click create
-* When your Notebook environment is created click: 'new' and select 'notebook' from the dropdown
-* Give the notebook a name and select python 3.6
-* Click 'new'
+### 1.1 - Create the Jupyter Notebook
+* Click +New' and select 'Notebook' from the dropdown
+* Give the notebook a name and select Python 3.6
+* Click 'New' to create the notebook
 * From the file explorer click on the newly created notebook
-* You should see an empty Jupytor Notebook now like on the screen below
+* You should see an empty Jupyter Notebook now like on the screen below
 
 ![amsl](assets/amsl_001.jpg)
 
@@ -71,7 +70,7 @@ ws = Workspace.create(name='<NAME>',
 * The first time you run the code you need to authenticate with your Azure Subscription. Follow the instructions.
 * When Authenticated successfully run the cell again.
 * *This can take a few minutes to create*
-* To validate if everyting is oké run the code to view the details of your workspace
+* To validate if everyting is ok run the code to view the details of your workspace
 ```
 ws.get_details()
 ```
