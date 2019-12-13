@@ -3,12 +3,12 @@
 **In this HOL you are going to use Azure Machine Learning Service and Azure Notebooks to create a MNIST model and run in in a container in Azure**
 
 ### Requirements 
-- Azure Subscription
+- [Azure Subscription](https://azure.microsoft.com/en-us/free/?WT.mc_id=gaic-github-cxa)
 
 ## Part 1 - Setup Azure Notebooks
 
 ### 1.1 - Create the Azure Notebook Environment
-* Goto: [notebooks.azure.com](https://notebooks.azure.com/)
+* Goto: [notebooks.azure.com](https://notebooks.azure.com/?WT.mc_id=gaic-github-cxa)
 * Login with your Microsoft Passport.
 * Click on 'My Projects' in the top menu
 * Click on 'New Project'
@@ -324,4 +324,6 @@ print(aci_service.scoring_uri)
 
 ## Clean up resources
 Finally, If you don't expect to need these resources in the future and want to save cost, you can delete them by deleting the resource group you created. To do so go to the Azure Portal, select 'Resource Groups' and select the resource group for this workshop, select Delete, then confirm the name of the resource group to delete.
+
+Looking to continue your learning of Azure Machine Learning SDK check out [more tutorials](https://docs.microsoft.com/en-us/azure/machine-learning/service/tutorial-1st-experiment-sdk-train/?WT.mc_id=gaic-github-cxa)
 
