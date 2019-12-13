@@ -322,4 +322,6 @@ print(aci_service.scoring_uri)
 
 ![amsl](assets/amsl_004.jpg)
 
-*You can clean everything up in your subscription by deleting the resource group.*
+## Clean up resources
+Finally, If you don't expect to need these resources in the future and want to save cost, you can delete them by deleting the resource group you created. To do so go to the Azure Portal, select 'Resource Groups' and select the resource group for this workshop, select Delete, then confirm the name of the resource group to delete.
+
