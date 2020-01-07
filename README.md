@@ -1,6 +1,6 @@
 # Azure Machine Learning Service
 
-**In this HOL you are going to use Azure Machine Learning Service and Azure Notebooks to create a MNIST model and run in in a container in Azure**
+**In this HOL you are going to use Azure Machine Learning Service and Azure Notebooks to create a MNIST model and run it in a container in Azure**
 
 ### Requirements 
 - [Azure Subscription](https://azure.microsoft.com/en-us/free/?WT.mc_id=gaic-github-cxa)
@@ -15,7 +15,7 @@
 * Give the project a name and a project ID and make the project private. *Make it private just to be sure you don't put any secrets online*
 
 ### 1.1 - Create the Jupyter Notebook
-* Click +New' and select 'Notebook' from the dropdown
+* Click '+New' and select 'Notebook' from the dropdown
 * Give the notebook a name and select Python 3.6
 * Click 'New' to create the notebook
 * From the file explorer click on the newly created notebook
@@ -27,9 +27,9 @@
 
 ### 2.1 - Import dependencies
 
-* Past this code in a cell and press run (Shift-enter).
+* Paste this code in a cell and press run (Shift-enter).
 
-```
+``` python
 import azureml
 import os
 import urllib
@@ -51,7 +51,7 @@ print("Azure ML SDK Version: ", azureml.core.VERSION)
 
 ### 2.2 - Setup the workspace
 
-* Past this code in the next cell to create an Azure Machine Learning Workspace.
+* Paste this code in the next cell to create an Azure Machine Learning Workspace.
 
 | Varname | Value |
 | --- | --- |
@@ -60,7 +60,7 @@ print("Azure ML SDK Version: ", azureml.core.VERSION)
 | RESOURCE GROUP | A unique name for a Resource Group |
 | LOCATION | Region to run the workspace like: westeurope |
 
-```
+``` python
 ws = Workspace.create(name='<NAME>',
          subscription_id='<SUBSCRIPTION ID>',
          resource_group='<RESOURCE GROUP>',
@@ -71,14 +71,14 @@ ws = Workspace.create(name='<NAME>',
 * When Authenticated successfully run the cell again.
 * *This can take a few minutes to create*
 * To validate if everyting is ok run the code to view the details of your workspace
-```
+``` python
 ws.get_details()
 ```
 
 ### 2.3 - Setup the Cloud ComputeTarget
 
-* Past the code below to create your AI Compute Cluster. Replace CLUSTERNAME with your name.
-```
+* Paste the code below to create your AI Compute Cluster. Replace CLUSTERNAME with your name.
+``` python
 clusterName = 'CLUSTERNAME'
 try:
     computeCluster = ComputeTarget(workspace=ws, name=clusterName)
@@ -95,7 +95,7 @@ except ComputeTargetException:
 
 * Paste the code below in a cell and run it to view some details about your cluster. The Cluster is ready if you see that you have a 1 behind 'idleNodeCount'.
 
-```
+``` python
 status = computeCluster.get_status()
 print('Current node count: ',status.current_node_count)
 print('VM Size: ',status.vm_size)
@@ -105,8 +105,8 @@ computeCluster.status.node_state_counts.serialize()
 
 ### 2.4 - Connect to your datastore
 
-* Past the code below in a new cell to connect to your default datastore
-```
+* Paste the code below in a new cell to connect to your default datastore: 
+``` python
 ds = ws.get_default_datastore()
 print(ds.name)
 ```
@@ -115,7 +115,7 @@ print(ds.name)
 
 * Run this code below in a new cell to download the training data to the Azure Notebook
 
-```
+``` python
 os.makedirs('./data/mnist', exist_ok=True)
 
 urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz', filename = './data/mnist/train-images.gz')
@@ -126,7 +126,7 @@ urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ub
 
 ### 2.6 - Upload the training data to your datastore
 * Run this code in a new cell to upload the files from your Azure Notebook to your datastore
-```
+``` python
 ds.upload(src_dir='./data/mnist', target_path='mnist', overwrite=True, show_progress=True)
 ```
 
@@ -136,7 +136,7 @@ ds.upload(src_dir='./data/mnist', target_path='mnist', overwrite=True, show_prog
 
 * Run the code below to create an Experiment in your workspace. Replace 'ExperimentName' with your own name.
   
-```
+``` python
 ExperimentName = 'ExperimentName'
 
 exp = Experiment(workspace=ws, name=ExperimentName)
@@ -150,9 +150,9 @@ print(exp.name)
 
 ![amsl](assets/amsl_002.jpg)
 
-* Run the code below to copy the scripts to a scriptfolder that will be used later on.
+* Run the code below to copy the scripts to a script folder that will be used later on.
 
-```
+``` python
 script_folder = './trainingscripts'
 os.makedirs(script_folder, exist_ok=True)
 
@@ -162,7 +162,7 @@ shutil.copy('./utils.py', script_folder)
 
 * Run the code below to create the estimator for the experiment.
 
-```
+``` python
 script_params = {
     '--data-folder': ws.get_default_datastore().as_mount(),
     '--batch-size': 50,
@@ -182,11 +182,11 @@ est = TensorFlow(source_directory=script_folder,
 ### 3.3 - Run the Experiment
 
 * Run the code below in a new cell to run the experiment
-```
+``` python
 run = exp.submit(config=est)
 ```
 * When the job is submitted you can run the below to see the progress of your model.
-```
+``` python
 RunDetails(run).show()
 ``` 
 
@@ -195,12 +195,12 @@ RunDetails(run).show()
 ### 3.4 - Save the model
 
 * Run the command below to see a list of trainings artifacts.
-```
+``` python
 run.get_file_names()
 ```
 
 * Run the code below in a new cell to save the model to your Azure Notebook
-```
+``` python
 os.makedirs('model', exist_ok=True)
 run.download_file(name='outputs/model/mnist-tf.model.meta', output_file_path='model')
 run.download_file(name='outputs/model/mnist-tf.model.index', output_file_path='model')
@@ -210,11 +210,11 @@ run.download_file(name='outputs/model/mnist-tf.model.data-00000-of-00001', outpu
 ### 3.5 - Register the model
 
 * Run the code below in a new cell to register the model in your Azure Machine Learning workspace
-```
+``` python
 model = Model.register(ws, model_name='TensorflowMNISTModel', model_path='model', description='MNIST Model')
 ```
-* To see some details about the model run this line in a new cell
-```
+* To see some details about the model, run this line in a new cell
+``` python
 print(model.name ,model.id, model.version, sep = '\t')
 ```
 
@@ -224,7 +224,7 @@ print(model.name ,model.id, model.version, sep = '\t')
 
 * Run the code below in a new cell to create the score.py.
 
-```
+``` python
 %%writefile score.py
 import json
 import numpy as np
@@ -252,11 +252,11 @@ def run(raw_data):
     return json.dumps(y_hat.tolist())
 ```
 
-### 4.2 - Create a environment file
+### 4.2 - Create an environment file
 
 * Run the code below in a new cell to create the myenv.yml.
 
-```
+``` python
 from azureml.core.runconfig import CondaDependencies
 cd = CondaDependencies.create()
 cd.add_conda_package('numpy')
@@ -268,7 +268,7 @@ cd.save_to_file(base_directory='./', conda_file_path='myenv.yml')
 
 * Run the code below in a new cell to create the Docker Image for your model. 
 
-```
+``` python
 image_config = ContainerImage.image_configuration(runtime= "python",
                                  execution_script="score.py",
                                  conda_file="myenv.yml")
@@ -286,7 +286,7 @@ image.wait_for_creation(show_output=True)
 * Replace **NAME** with your unique name for the service (like: tf-mnist-yourname)
 * *Coffee time again, this can take a while ...*  
          
-```
+``` python
 aci_service_name = 'NAME'
 
 aciconfig = AciWebservice.deploy_configuration(
@@ -306,7 +306,7 @@ print(aci_service.state)
 
 * When you see the message: "Healthy" you can type the code below in a new cell to see the scoring URL for your model.
 
-```
+``` python
 print(aci_service.scoring_uri)
 ```
 
